@@ -1,0 +1,93 @@
+import React from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { addQTY, removeQTY, removeItem } from "./CartSlice";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+const CartItem = () => {
+  const cartData = useSelector((state) => state.mycart.cart);
+  const cartData2 = useSelector((state) => state.mycart.cart2);
+  const userItems = useSelector((state) => state.mycart.userITEMS); // Get user items
+  const dispatch = useDispatch();
+  const mynav = useNavigate();
+  let netAmount = 0;
+
+  // Merge cart data, cartData2, and user items data
+  const mergedItems = [...cartData, ...cartData2, ...userItems];
+
+  // Calculate net amount
+  const ans = mergedItems.map((key) => {
+    netAmount += key.price * key.qnty;
+    return (
+      <tr id="maincartitems" key={key.id}>
+        <td>
+          <img src={"images/" + (key.image || key.image1)} id="cartimage" alt={key.name} />
+        </td>
+        <td id="carttype">{key.type || key.type1}</td>
+        <td id="cartname">{key.name || key.name1}</td>
+        <td id="cartprice">{key.price || key.price1}</td>
+        <td id="cartqty">
+          <button id="cartqtyplus" onClick={() => { dispatch(addQTY({ id: key.id })) }}> + </button>
+          <span id="cartqtyqty"> {key.qnty} </span>
+          <button id="cartqtyminus" onClick={() => { dispatch(removeQTY({ id: key.id })) }}> - </button>
+        </td>
+        <td id="carttotalprice">{netAmount}</td>
+        <td>
+          <button id="cartremoval" onClick={() => { dispatch(removeItem(key.id)) }}>Remove</button>
+        </td>
+      </tr>
+    );
+  });
+
+  const BuyNow = () => {
+    mynav("/buynow");
+  };
+  return (
+    <>
+      <div id='navbarbicycles' >
+        <img id="logob" src="/images/logo-1.png" />
+        <nav id="mainnavb">
+          <ul>
+            <li>
+              <Link id="homeb" to="/home">HOME</Link>
+            </li>
+            <li>
+              <Link id="bicyclesb" to="/bicycles">BICYCLES</Link>
+            </li>
+            <li>
+              <Link id="accessoriesb" to="/accessories">ACCESSORIES</Link>
+            </li>
+            <li>
+              <Link id="about-usb" to="/about-us">ABOUT US</Link>
+            </li>
+            <li>
+              <Link id="contactb" to="/contact">CONTACT</Link>
+            </li>
+          </ul>
+        </nav>
+        <i id="cartlogob" className="fa fa-shopping-cart" aria-hidden="true"></i>
+      </div>
+      <div id="mainbodycart">
+        <Link to="/buynow">
+          <button id="buynow1"> Proceed for Payment </button>
+        </Link>
+        <div id="tablecart">
+          <div id="tablecartheading">Cart</div>
+          <table id="cartTable">
+            <thead>
+              <tr>
+                <th id="cartproduct">Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>{ans}</tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default CartItem;
