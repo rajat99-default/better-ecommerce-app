@@ -150,6 +150,19 @@
       "role": "user",
       "items": [
         {
+          "id": "2",
+          "name": "Kryo X26 MTB – Model X",
+          "price": "350.00",
+          "image": "b2.jpg",
+          "type": "Bicycles",
+          "qnty": 1
+        },
+        {
+          "id": "1",
+          "name": "Kryo X26 MTB – Model K",
+          "price": "350.00",
+          "image": "b1.jpg",
+          "type": "Bicycles",
           "qnty": 1
         }
       ]
